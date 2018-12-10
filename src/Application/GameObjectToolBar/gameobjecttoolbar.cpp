@@ -9,12 +9,14 @@ GameObjectToolBar::GameObjectToolBar(QWidget *parent) :
     connect(ui->eraserPushButton, &QPushButton::clicked, this, [this](){
         if(!toolErase)
             return;
-        currentTool = toolErase.get();
+        currentTool = toolErase.get(); 
+        emit changeCursor(QCursor(QPixmap(":/eraser.png")));
     });
     connect(ui->selectPushButton, &QPushButton::clicked, this, [this](){
         if(!toolSelect)
             return;
         currentTool = toolSelect.get();
+        emit changeCursor(QCursor());
     });
     connect(ui->gameObjectListWidget, &QListWidget::itemClicked, this, [this]()
     {
@@ -22,6 +24,7 @@ GameObjectToolBar::GameObjectToolBar(QWidget *parent) :
             return;
         currentTool = toolCreate.get();
         toolCreate->setIndex(static_cast<uint>(ui->gameObjectListWidget->currentRow()));
+        emit changeCursor(QCursor());
     });
 }
 

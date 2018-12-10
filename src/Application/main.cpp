@@ -2,16 +2,19 @@
 #include <QApplication>
 #include "../../export/Core/core.h"
 #include "Setting/settingjson.h"
-#include "Storage/storagejson.h"
+#include "DownloaderFromJson/downloaderfromjson.h"
+#include "UnloaderToJson/unloadertojson.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     SettingJson setting("setting.json");
-    StorageJson storage;
+    DownloaderFromJson downloader(&setting);
+    UnloaderToJson unloader;
+
     MainWindow w;
-    Core core(&w, &setting, &storage);
+    Core core(&w, &setting, &downloader, &unloader);
 
     w.show();
 

@@ -15,6 +15,14 @@ void PropertyFloat::createPropertyControl(UserInterfaceGateway *userInterfaceGat
     control->setCallbackValueChange([this](float value){ setValue(value); });
 }
 
+std::unique_ptr<StorageProperty> PropertyFloat::getStorageProperty(UnloadGateway *unloadGateway)
+{
+    std::unique_ptr<StoragePropertyFloat> storage = unloadGateway->getStoragePropertyFloat();
+    storage->setValue(value);
+    storage->setName(name);
+    return std::move(storage);
+}
+
 std::unique_ptr<Property> PropertyFloat::clone()
 {
     PropertyFloat *copy = new PropertyFloat(name);

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QCheckBox>
+#include <QDebug>
 #include "../../export/Core/PropertyControl/propertyboolcontrol.h"
 
 namespace Ui {

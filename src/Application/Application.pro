@@ -36,7 +36,15 @@ SOURCES += \
         Tool/toolselect.cpp \
         Tool/toolerase.cpp \
         Setting/settingjson.cpp \
-        Storage/storagejson.cpp
+        DownloaderFromJson/downloaderfromjson.cpp \
+        UnloaderToJson/unloadertojson.cpp \
+        StorageJson/storagepropertyintjson.cpp \
+        StorageJson/storagepropertybooljson.cpp \
+        StorageJson/storagepropertyfloatjson.cpp \
+        StorageJson/storagepropertyliststatejson.cpp \
+        StorageJson/storagegameobjectjson.cpp \
+        StorageJson/storagescenejson.cpp \
+        StorageJson/storagejson.cpp
 
 HEADERS += \
         MainWindow/mainwindow.h \
@@ -53,6 +61,12 @@ HEADERS += \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertyint.h \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertyliststate.h \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertyfloat.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagescene.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagegameobject.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertybool.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyfloat.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyint.h \
+        $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyliststate.h \
         SceneObject/sceneobjectasimage.h \
         GameObjectToolBar/gameobjecttoolbar.h \
         PropertyWidget/propertyboolwidget.h \
@@ -65,7 +79,15 @@ HEADERS += \
         Tool/toolselect.h \
         Tool/toolerase.h \
         Setting/settingjson.h \
-        Storage/storagejson.h
+        DownloaderFromJson/downloaderfromjson.h \
+        UnloaderToJson/unloadertojson.h \
+        StorageJson/storagepropertyintjson.h \
+        StorageJson/storagepropertybooljson.h \
+        StorageJson/storagepropertyfloatjson.h \
+        StorageJson/storagepropertyliststatejson.h \
+        StorageJson/storagegameobjectjson.h \
+        StorageJson/storagescenejson.h \
+        StorageJson/storagejson.h
 
 FORMS += \
         MainWindow/mainwindow.ui \

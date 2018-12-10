@@ -38,3 +38,4 @@ std::string GameObject::getName() const
 {
     return name;
 }
+

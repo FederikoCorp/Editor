@@ -59,7 +59,7 @@ private:
     QGraphicsRectItem cursor;
     const uint itemSize = 50;
     std::vector<std::unique_ptr<QGraphicsItem>> grid;
-    std::vector<std::unique_ptr<QGraphicsItem>> items;
+    std::vector<std::vector<std::unique_ptr<QGraphicsItem>>> items;
 
     std::function<void (uint width, uint height)> callbackCreateScene;
     std::function<void (const std::string &fileName)> callbackOpenScene;

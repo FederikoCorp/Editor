@@ -48,5 +48,13 @@ HEADERS += \
     $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyfloatcontrol.h \
     $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyintcontrol.h \
     $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyliststatecontrol.h \
-    $$PROJECT_ROOT_PATH/Export/Core/Gateway/storagegateway.h
+    $$PROJECT_ROOT_PATH/Export/Core/Gateway/downloadgateway.h \
+    $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storageproperty.h \
+    $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyint.h \
+    $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyfloat.h \
+    $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertybool.h \
+    $$PROJECT_ROOT_PATH/Export/Core/StorageProperty/storagepropertyliststate.h \
+    $$PROJECT_ROOT_PATH/Export/Core/Gateway/unloadgateway.h \
+    ../../export/Core/StorageProperty/storagescene.h \
+    ../../export/Core/StorageProperty/storagegameobject.h
 

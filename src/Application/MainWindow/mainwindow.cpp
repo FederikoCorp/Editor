@@ -31,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, &QAction::triggered, this, [=](){
         callbackExit();
     });
+    connect(ui->gameObjectToolBar, &GameObjectToolBar::changeCursor, this, [this](QCursor cursor){
+        ui->sceneView->setCursor(cursor);
+    });
 }
 
 MainWindow::~MainWindow()
@@ -77,9 +80,11 @@ void MainWindow::addSceneObject(std::shared_ptr<SceneObject> sceneObject, uint x
     if(image.isNull())
         return;
     image = image.scaled(static_cast<int>(itemSize), static_cast<int>(itemSize));
+
     std::unique_ptr<QGraphicsItem> ptr(scene.addPixmap(QPixmap::fromImage(image)));
     ptr->setPos(toPos(x), toPos(y));
-    items.push_back(std::move(ptr));
+
+    items[x][y] = std::move(ptr);
 }
 
 void MainWindow::selectSceneObject(uint x, uint y)
@@ -89,23 +94,29 @@ void MainWindow::selectSceneObject(uint x, uint y)
 
 void MainWindow::removeSceneObject(uint x, uint y)
 {
-    scene.removeItem(scene.items(QPointF(toPos(x), toPos(y))).back());
+    scene.removeItem(items[x][y].get());
+    items[x][y].reset(nullptr);
 }
 
 void MainWindow::createScene(uint width, uint height)
 {
     grid.clear();
+    items.clear();
     for(uint i = 0; i < width; ++i)
+    {
+        items.emplace_back(height);
         for(uint j = 0; j < height; ++j)
         {
             grid.emplace_back(scene.addRect(toPos(i),toPos(j), itemSize, itemSize, QPen(QColor(50,10,10),0.5)));
             grid.back()->setZValue(1);
         }
+    }
 }
 
 void MainWindow::clearScene()
 {
     items.clear();
+    grid.clear();
 }
 
 void MainWindow::addGameObjectTool(std::shared_ptr<SceneObject> sceneObject, const std::string &name)
@@ -168,6 +179,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     Tool *tool = ui->gameObjectToolBar->getCurrentTool();
     if(tool == nullptr)
         return false;
+
     if(mouseEvent->button() == Qt::LeftButton)
     {
         x = static_cast<uint>(mouseEvent->buttonDownScenePos(Qt::LeftButton).x()) / itemSize;

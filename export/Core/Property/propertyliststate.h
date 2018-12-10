@@ -10,8 +10,11 @@ class PropertyListState : public Property
 public:
     PropertyListState(const std::string& name);
     ~PropertyListState() override = default;
+
     void createPropertyControl(UserInterfaceGateway *userInterfaceGateWay) override;
+    std::unique_ptr<StorageProperty> getStorageProperty(UnloadGateway *unloadGateway) override;
     std::unique_ptr<Property> clone() override;
+
     void addState(const std::string &state);
     std::string getState(uint index) const;
     uint getCountState() const;

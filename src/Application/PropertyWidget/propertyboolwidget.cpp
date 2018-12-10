@@ -8,7 +8,7 @@ PropertyBoolWidget::PropertyBoolWidget(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->propertyCheckBox, &QCheckBox::stateChanged, this, [this](int state) {
         if(callbackValueChange)
-            callbackValueChange(state == 1);
+            callbackValueChange(state != 0);
     });
 }
 

@@ -24,6 +24,8 @@ public:
     void createToolCreate(const std::function<void(uint x, uint y, uint index)> &func);
     void createToolErase(const std::function<void(uint x, uint y)> &func);
     void createToolSelect(const std::function<void(uint x, uint y)> &func);
+signals:
+    void changeCursor(QCursor cursor);
 
 private:
     Ui::GameObjectToolBar *ui;

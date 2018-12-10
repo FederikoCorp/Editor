@@ -3,17 +3,16 @@
 
 #include "Gateway/userinterfacegateway.h"
 #include "Gateway/settinggateway.h"
-#include "Gateway/storagegateway.h"
+#include "Gateway/downloadgateway.h"
 #include "../Core/gameobject.h"
 #include "../Core/scene.h"
 
 //Класс отвечает за управление программой.
 //Так как функций мало, не стал дробить на несколько классов
-
 class Core
 {
 public:
-    Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, StorageGateway *storageGateway);
+    Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, DownloadGateway *downloadGateway, UnloadGateway *unloadGateway);
 
 private:
     void addGameObjectCallback(uint x, uint y, uint index);
@@ -29,13 +28,9 @@ private:
 
     UserInterfaceGateway *uiGateway;
     SettingGateway *settingGateway;
-    StorageGateway *storageGateway;
+    DownloadGateway *downloadGateway;
+    UnloadGateway *unloadGateway;
 
-    std::vector<std::unique_ptr<GameObject>> vecAvailableGameObject;
-    //SceneObject используется потому, что он у GameObject общий и по нему, можно найти ограничения
-    //другой вариант, использовать id у объекта
-    //
-    std::unordered_map<SceneObject*, uint> limitGameObject;
     std::unique_ptr<Scene> scene;
 };
 

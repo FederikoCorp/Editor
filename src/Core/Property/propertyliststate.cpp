@@ -17,6 +17,14 @@ void PropertyListState::createPropertyControl(UserInterfaceGateway *userInterfac
     });
 }
 
+std::unique_ptr<StorageProperty> PropertyListState::getStorageProperty(UnloadGateway *unloadGateway)
+{
+    std::unique_ptr<StoragePropertyListState> storage = unloadGateway->getStoragePropertyListState();
+    storage->setValue(currentState);
+    storage->setName(name);
+    return std::move(storage);
+}
+
 std::unique_ptr<Property> PropertyListState::clone()
 {
     PropertyListState *copy = new PropertyListState(name);

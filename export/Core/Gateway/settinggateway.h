@@ -8,7 +8,7 @@ class SettingGateway
 public:
     SettingGateway() = default;
     virtual ~SettingGateway() = default;
-    virtual std::vector<std::unique_ptr<GameObject>>  getAvailableGameObject() = 0;
+    virtual std::vector<std::unique_ptr<GameObject>>&  getAvailableGameObjects() = 0;
     virtual std::unordered_map<SceneObject*, uint> getLimitGameObject() = 0;
 };
 

@@ -3,12 +3,11 @@
 
 #include "../Core/scene.h"
 
-class StorageGateway
+class DownloadGateway
 {
 public:
-    StorageGateway() = default;
-    virtual ~StorageGateway() = default;
-    virtual void saveScene(Scene *scene, const std::string &fileName) = 0;
+    DownloadGateway() = default;
+    virtual ~DownloadGateway() = default;
     virtual std::unique_ptr<Scene> loadScene(const std::string &fileName) = 0;
 };
 

@@ -80,20 +80,27 @@ SettingJson::SettingJson(const std::string &fileName)
                 }
             }
         }
-
+        nameToGameObject[gameObject->getName()] = gameObject.get();
         availableGameObject.push_back(std::move(gameObject));
-
     }
 
     file.close();
 }
 
-std::vector<std::unique_ptr<GameObject> > SettingJson::getAvailableGameObject()
+std::vector<std::unique_ptr<GameObject> >& SettingJson::getAvailableGameObjects()
 {
-    return std::move(availableGameObject);
+    return availableGameObject;
 }
 
 std::unordered_map<SceneObject*, uint> SettingJson::getLimitGameObject()
 {
     return limitGameObject;
+}
+
+GameObject *SettingJson::getGameObjectByName(const std::string &name)
+{
+    auto it = nameToGameObject.find(name);
+    if(it != nameToGameObject.end())
+        return it->second;
+    return nullptr;
 }

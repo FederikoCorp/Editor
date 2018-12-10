@@ -20,11 +20,14 @@ class SettingJson : public SettingGateway
 {
 public:
     SettingJson(const std::string &fileName);
-    std::vector<std::unique_ptr<GameObject>>  getAvailableGameObject() override;
+    std::vector<std::unique_ptr<GameObject>>&  getAvailableGameObjects() override;
     std::unordered_map<SceneObject*, uint> getLimitGameObject() override;
+    GameObject *getGameObjectByName(const std::string &name);
+
 private:
     std::vector<std::unique_ptr<GameObject>> availableGameObject;
     std::unordered_map<SceneObject*, uint> limitGameObject;
+    std::unordered_map<std::string, GameObject*> nameToGameObject;
 };
 
 #endif // SETTINGJSON_H

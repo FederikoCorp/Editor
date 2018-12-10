@@ -9,8 +9,11 @@ class PropertyFloat : public Property
 public:
     PropertyFloat(const std::string &name);
     ~PropertyFloat() override = default;
+
     void createPropertyControl(UserInterfaceGateway *userInterfaceGateWay) override;
+    std::unique_ptr<StorageProperty> getStorageProperty(UnloadGateway *unloadGateway) override;
     std::unique_ptr<Property> clone() override;
+
     float getValue() const;
     void setValue(float value);
     float getMin() const;

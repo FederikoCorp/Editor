@@ -15,6 +15,14 @@ void PropertyInt::createPropertyControl(UserInterfaceGateway *userInterfaceGateW
     control->setCallbackValueChange([this](int value){ setValue(value); });
 }
 
+std::unique_ptr<StorageProperty> PropertyInt::getStorageProperty(UnloadGateway *unloadGateway)
+{
+    std::unique_ptr<StoragePropertyInt> storage = unloadGateway->getStoragePropertyInt();
+    storage->setValue(value);
+    storage->setName(name);
+    return std::move(storage);
+}
+
 std::unique_ptr<Property> PropertyInt::clone()
 {
     PropertyInt *copy = new PropertyInt(name);
