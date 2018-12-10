@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameObjectToolBar</class>
+ <widget class="QWidget" name="GameObjectToolBar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>188</width>
+    <height>553</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QPushButton" name="selectPushButton">
+     <property name="text">
+      <string>Выделение</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="eraserPushButton">
+     <property name="text">
+      <string>Ластик</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../resource/resource.qrc">
+       <normaloff>:/eraser.png</normaloff>:/eraser.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Игровые объекты:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="gameObjectListWidget"/>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../resource/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
