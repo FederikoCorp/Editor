@@ -1,4 +1,12 @@
 #include "unloadertojson.h"
+#include "StorageJson/storagegameobjectjson.h"
+#include "StorageJson/storagepropertybooljson.h"
+#include "StorageJson/storagepropertyfloatjson.h"
+#include "StorageJson/storagepropertyintjson.h"
+#include "StorageJson/storagepropertyliststatejson.h"
+#include "StorageJson/storagescenejson.h"
+#include <QFile>
+#include <QJsonDocument>
 
 UnloaderToJson::UnloaderToJson()
 {

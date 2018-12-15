@@ -1,8 +1,34 @@
 #include "../../export/Core/core.h"
+#include "../../export/Core/gameobject.h"
+#include "../../export/Core/scene.h"
+#include "../../export/Core/Property/property.h"
 
-Core::Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, DownloadGateway *storageGateway, UnloadGateway *unloadGateway) :
-    uiGateway(uiGateWay), settingGateway(settingGateway), downloadGateway(storageGateway), unloadGateway(unloadGateway)
+#include "../../export/Core/Gateway/userinterfacegateway.h"
+#include "../../export/Core/Gateway/settinggateway.h"
+#include "../../export/Core/Gateway/downloadgateway.h"
+#include "../../export/Core/Gateway/unloadgateway.h"
+
+#include "../../export/Core/StorageProperty/storagescene.h"
+#include "../../export/Core/StorageProperty/storagegameobject.h"
+#include "../../export/Core/StorageProperty/storageproperty.h"
+
+struct Core::CoreData
 {
+    UserInterfaceGateway *uiGateway;
+    SettingGateway *settingGateway;
+    DownloadGateway *downloadGateway;
+    UnloadGateway *unloadGateway;
+    std::unique_ptr<Scene> scene;
+};
+
+Core::Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, DownloadGateway *downloadGateway, UnloadGateway *unloadGateway) :
+    data(new CoreData)
+{
+    data->uiGateway = uiGateWay;
+    data->settingGateway =  settingGateway;
+    data->downloadGateway = downloadGateway;
+    data->unloadGateway = unloadGateway;
+
     loadAvailableGameObject();
 
     uiGateWay->setCallbackAddGameObject([this](uint x, uint y, uint index) { addGameObjectCallback(x, y, index); });
@@ -14,142 +40,137 @@ Core::Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, Down
     uiGateWay->setCallbackExit([this]() { exitCallback(); });
 }
 
+Core::~Core() = default;
+
 void Core::addGameObjectCallback(uint x, uint y, uint index)
 {
-    if(!scene)
+    if(!data->scene)
         return;
-    if (x >= scene->getWidth() || y >= scene->getHeight())
+    if (x >= data->scene->getWidth() || y >= data->scene->getHeight())
         return;
-    if(scene->isGameObject(x, y))
+    if(data->scene->isGameObject(x, y))
     {
         selectGameObjectCallback(x, y);
         return;
     }
 
-    GameObject *gameObject = settingGateway->getAvailableGameObjects().at(index).get();
-    if(scene->isLimit(gameObject))
-    {
-        if(scene->getLimit(gameObject) == 0)
-            return;
-        scene->decLimit(gameObject);
-    }
+    GameObject *gameObject = data->settingGateway->getAvailableGameObjects().at(index).get();
+    std::unique_ptr<GameObject> copy = gameObject->clone(); 
+    if(!copy)
+        return;
+    copy->setPosition(x, y);
 
-    std::unique_ptr<GameObject> copy = gameObject->clone();
-    uiGateway->destroyPropertyControls();
+    data->uiGateway->destroyPropertyControls();
     createPropertyControl(copy.get());
 
-    uiGateway->addSceneObject(copy->getSceneObject(), x, y);
-    uiGateway->selectSceneObject(x, y);
+    data->uiGateway->addSceneObject(copy->getSceneObject(), x, y);
+    data->uiGateway->selectSceneObject(x, y);
 
-    scene->addGameObject(std::move(copy), x, y);
+    data->scene->addGameObject(std::move(copy));
 }
 
 void Core::selectGameObjectCallback(uint x, uint y)
 {
-    if(!scene)
+    if(!data->scene)
         return;
-    uiGateway->selectSceneObject(x, y);
-    uiGateway->destroyPropertyControls();
-    if (x >= scene->getWidth() || y >= scene->getHeight())
+    data->uiGateway->selectSceneObject(x, y);
+    data->uiGateway->destroyPropertyControls();
+    if (x >= data->scene->getWidth() || y >= data->scene->getHeight())
         return;
-    if(!scene->isGameObject(x, y))
+    if(!data->scene->isGameObject(x, y))
         return;
-    GameObject *gameObject = scene->getGameObject(x, y);
+    GameObject *gameObject = data->scene->getGameObject(x, y);
     createPropertyControl(gameObject);
 }
 
 void Core::removeGameObjectCallback(uint x, uint y)
 {
-    if(!scene)
+    if(!data->scene)
         return;
-    if (x >= scene->getWidth() || y >= scene->getHeight())
+    if (x >= data->scene->getWidth() || y >= data->scene->getHeight())
         return;
-    if(!scene->isGameObject(x, y))
+    if(!data->scene->isGameObject(x, y))
         return;
 
-    if(scene->isLimit(scene->getGameObject(x, y)))
-        scene->incLimit(scene->getGameObject(x, y));
-
-    uiGateway->destroyPropertyControls();
-    scene->removeGameObject(x, y);
-    uiGateway->selectSceneObject(x, y);
-    uiGateway->removeSceneObject(x, y);
+    data->uiGateway->destroyPropertyControls();
+    data->scene->removeGameObject(x, y);
+    data->uiGateway->selectSceneObject(x, y);
+    data->uiGateway->removeSceneObject(x, y);
 }
 
 void Core::createSceneCallback(uint width, uint height)
 {
     if(width == 0 || height == 0)
         return;
-    scene = std::make_unique<Scene>(width, height);
-    scene->setLimitGameObject(settingGateway->getLimitGameObject());
+    data->scene = std::make_unique<Scene>(width, height);
 
-    uiGateway->destroyPropertyControls();
-    uiGateway->clearScene();
-    uiGateway->createScene(width, height);
+    data->uiGateway->destroyPropertyControls();
+    data->uiGateway->clearScene();
+    data->uiGateway->createScene(width, height);
 }
 
 void Core::openSceneCallback(const std::string &fileName)
 {
     if(fileName.empty())
         return;
-    uiGateway->destroyPropertyControls();
-    uiGateway->clearScene();
-    scene = downloadGateway->loadScene(fileName);
-    if(!scene)
+    data->uiGateway->destroyPropertyControls();
+    data->uiGateway->clearScene();
+    data->scene = data->downloadGateway->loadScene(fileName);
+    if(!data->scene)
         return;
 
-    uiGateway->createScene(scene->getWidth(), scene->getHeight());
-    for(unsigned int x = 0; x < scene->getWidth(); ++x)
+    data->uiGateway->createScene(data->scene->getWidth(), data->scene->getHeight());
+    for(unsigned int x = 0; x < data->scene->getWidth(); ++x)
     {
-        for(unsigned int y = 0; y < scene->getHeight(); ++y)
+        for(unsigned int y = 0; y < data->scene->getHeight(); ++y)
         {
-            if(scene->isGameObject(x, y))
-                uiGateway->addSceneObject(scene->getGameObject(x, y)->getSceneObject(), x, y);
+            if(data->scene->isGameObject(x, y))
+                data->uiGateway->addSceneObject(data->scene->getGameObject(x, y)->getSceneObject(), x, y);
         }
     }
 }
 
 void Core::saveSceneCallback(const std::string &fileName)
 {
-    if(!scene)
+    if(!data->scene)
         return;
     if(fileName.empty())
         return;
-    std::unique_ptr<StorageScene> storageScene = unloadGateway->getStorageScene();
-    storageScene->setSize(scene->getWidth(), scene->getHeight());
-    auto sceneMap = scene->getGameObjectPositionMap();
-    for(auto it = sceneMap.begin(); it != sceneMap.end(); ++it)
+
+    std::unique_ptr<StorageScene> storageScene = data->unloadGateway->getStorageScene();
+    storageScene->setSize(data->scene->getWidth(), data->scene->getHeight());
+
+    for(auto it = data->scene->begin(); it != data->scene->end(); ++it)
     {
-        std::unique_ptr<StorageGameObject> storageGameObject = unloadGateway->getStorageGameObject();
-        storageGameObject->setName(it->first->getName());
-        auto pos = it->second;
-        storageGameObject->setPosition(pos.first, pos.second);
-        GameObject *gameObject = it->first;
+        GameObject *gameObject = it->second.get();
+
+        std::unique_ptr<StorageGameObject> storageGameObject = data->unloadGateway->getStorageGameObject();
+        storageGameObject->setName(gameObject->getName());
+        storageGameObject->setPosition(gameObject->getX(), gameObject->getY());
+
         for(uint i = 0; i < gameObject->getCountProperty(); ++i)
         {
-            std::unique_ptr<StorageProperty> storageProperty = gameObject->getProperty(i)->getStorageProperty(unloadGateway);
+            std::unique_ptr<StorageProperty> storageProperty = gameObject->getProperty(i)->createStorageProperty(data->unloadGateway);
             storageGameObject->addStorageProperty(std::move(storageProperty));
         }
         storageScene->addStorageGameObject(std::move(storageGameObject));
     }
-    unloadGateway->unload(fileName, std::move(storageScene));
+    data->unloadGateway->unload(fileName, std::move(storageScene));
 }
 
 void Core::exitCallback()
 {
-    //Можно конечно вызвать exit просто в ui, не знаю как лучше
-    //По идее здесь должны спрашивать надо ли сохранять
-    uiGateway->exit();
+    data->uiGateway->exit();
 }
 
 void Core::createPropertyControl(GameObject *gameObject)
 {
     for(unsigned int i = 0; i < gameObject->getCountProperty(); ++i)
-        gameObject->getProperty(i)->createPropertyControl(uiGateway);
+        gameObject->getProperty(i)->createPropertyControl(data->uiGateway);
 }
 
 void Core::loadAvailableGameObject()
 {
-    for(std::unique_ptr<GameObject> &obj : settingGateway->getAvailableGameObjects())
-        uiGateway->addGameObjectTool(obj->getSceneObject(), obj->getName());
+    for(std::unique_ptr<GameObject> &obj : data->settingGateway->getAvailableGameObjects())
+        data->uiGateway->addGameObjectTool(obj->getSceneObject(), obj->getName());
 }

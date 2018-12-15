@@ -1,7 +1,6 @@
 #ifndef STORAGEPROPERTYFLOATJSON_H
 #define STORAGEPROPERTYFLOATJSON_H
 
-#include <QJsonObject>
 #include "../../export/Core/StorageProperty/storagepropertyfloat.h"
 #include "StorageJson/storagejson.h"
 

@@ -2,11 +2,13 @@
 #define UNLOADGATEWAY_H
 
 #include <memory>
-#include "../../export/Core/StorageProperty/storagepropertybool.h"
-#include "../../export/Core/StorageProperty/storagepropertyfloat.h"
-#include "../../export/Core/StorageProperty/storagepropertyint.h"
-#include "../../export/Core/StorageProperty/storagepropertyliststate.h"
-#include "../../export/Core/StorageProperty/storagescene.h"
+
+class StoragePropertyInt;
+class StoragePropertyFloat;
+class StoragePropertyBool;
+class StoragePropertyListState;
+class StorageScene;
+class StorageGameObject;
 
 class UnloadGateway
 {

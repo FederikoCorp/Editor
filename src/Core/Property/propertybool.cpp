@@ -1,4 +1,8 @@
 #include "../../export/Core/Property/propertybool.h"
+#include "../../export/Core/Gateway/userinterfacegateway.h"
+#include "../../export/Core/Gateway/unloadgateway.h"
+#include "../../export/Core/PropertyControl/propertyboolcontrol.h"
+#include "../../export/Core/StorageProperty/storagepropertybool.h"
 
 PropertyBool::PropertyBool(const std::string &name) : Property (name)
 {
@@ -13,7 +17,7 @@ void PropertyBool::createPropertyControl(UserInterfaceGateway *userInterfaceGate
     control->setCallbackValueChange([this](bool value){ setValue(value); });
 }
 
-std::unique_ptr<StorageProperty> PropertyBool::getStorageProperty(UnloadGateway *unloadGateway)
+Property::StoragePropertyPtr PropertyBool::createStorageProperty(UnloadGateway *unloadGateway)
 {
     std::unique_ptr<StoragePropertyBool> storage = unloadGateway->getStoragePropertyBool();
     storage->setValue(value);
@@ -21,7 +25,7 @@ std::unique_ptr<StorageProperty> PropertyBool::getStorageProperty(UnloadGateway 
     return std::move(storage);
 }
 
-std::unique_ptr<Property> PropertyBool::clone()
+Property::PropertyPtr PropertyBool::clone()
 {
     PropertyBool *copy = new PropertyBool(name);
     copy->setValue(value);

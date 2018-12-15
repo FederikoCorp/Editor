@@ -31,3 +31,8 @@ void PropertyListStateWidget::addState(const std::string &state)
 {
     ui->comboBox->addItem(state.c_str());
 }
+
+void PropertyListStateWidget::setCallbackValueChange(const std::function<void (unsigned int)> &callback)
+{
+    callbackValueChange = callback;
+}

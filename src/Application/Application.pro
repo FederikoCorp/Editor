@@ -21,10 +21,6 @@ LIBS += "$$PROJECT_ROOT_PATH/lib/Core.dll"
 SOURCES += \
         main.cpp \
         MainWindow/mainwindow.cpp \
-        $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyboolcontrol.cpp \
-        $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyfloatcontrol.cpp \
-        $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyintcontrol.cpp \
-        $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyliststatecontrol.cpp \
         SceneObject/sceneobjectasimage.cpp \
         GameObjectToolBar/gameobjecttoolbar.cpp \
         PropertyWidget/propertyboolwidget.cpp \
@@ -56,7 +52,7 @@ HEADERS += \
         $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyfloatcontrol.h \
         $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyintcontrol.h \
         $$PROJECT_ROOT_PATH/Export/Core/PropertyControl/propertyliststatecontrol.h \
-        $$PROJECT_ROOT_PATH/Export/Core/Property\property.h \
+        $$PROJECT_ROOT_PATH/Export/Core/Property/property.h \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertybool.h \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertyint.h \
         $$PROJECT_ROOT_PATH/Export/Core/Property/propertyliststate.h \
@@ -101,5 +97,4 @@ FORMS += \
 RESOURCES += \
     ../../resource/resource.qrc
 
-DISTFILES += \
-    ../../resource/eraser.png
+DISTFILES +=

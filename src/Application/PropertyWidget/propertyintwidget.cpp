@@ -36,3 +36,8 @@ void PropertyIntWidget::setMax(int value)
 {
     ui->spinBox->setMaximum(value);
 }
+
+void PropertyIntWidget::setCallbackValueChange(const std::function<void (int)> &callback)
+{
+    callbackValueChange = callback;
+}

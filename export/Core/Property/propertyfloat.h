@@ -11,8 +11,8 @@ public:
     ~PropertyFloat() override = default;
 
     void createPropertyControl(UserInterfaceGateway *userInterfaceGateWay) override;
-    std::unique_ptr<StorageProperty> getStorageProperty(UnloadGateway *unloadGateway) override;
-    std::unique_ptr<Property> clone() override;
+    StoragePropertyPtr createStorageProperty(UnloadGateway *unloadGateway) override;
+    PropertyPtr clone() override;
 
     float getValue() const;
     void setValue(float value);

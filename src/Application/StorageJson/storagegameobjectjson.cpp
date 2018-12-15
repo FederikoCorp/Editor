@@ -1,4 +1,7 @@
 #include "storagegameobjectjson.h"
+#include <QJsonObject>
+#include <QJsonArray>
+#include "../../export/Core/StorageProperty/storageproperty.h"
 
 StorageGameObjectJson::StorageGameObjectJson()
 {

@@ -19,9 +19,11 @@ public:
     void setValue(float value) override;
     void setMin(float value) override;
     void setMax(float value) override;
+    void setCallbackValueChange(const std::function<void (float)> &callback) override;
 
 private:
     Ui::PropertyFloatWidget *ui;
+    std::function<void (float)> callbackValueChange;
 };
 
 #endif // PROPERTYFLOATWIDGET_H

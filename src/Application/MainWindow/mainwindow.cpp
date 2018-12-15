@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "Tool/tool.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     cursor.setZValue(1);
 
     scene.addItem(&cursor);
-
     scene.installEventFilter(this);
     connect(ui->actionCreateScene, &QAction::triggered, this, [this](){
         //По идее здесь должно появлятся диалоговое окно с настройками сцены, в которо указывается размер

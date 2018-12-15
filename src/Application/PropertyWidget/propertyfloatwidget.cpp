@@ -36,3 +36,8 @@ void PropertyFloatWidget::setMax(float value)
 {
     ui->doubleSpinBox->setMaximum(static_cast<double>(value));
 }
+
+void PropertyFloatWidget::setCallbackValueChange(const std::function<void (float)> &callback)
+{
+    callbackValueChange = callback;
+}

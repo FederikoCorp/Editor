@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QCheckBox>
-#include <QDebug>
 #include "../../export/Core/PropertyControl/propertyboolcontrol.h"
 
 namespace Ui {
@@ -19,9 +18,11 @@ public:
     ~PropertyBoolWidget() override;
     void setName(const std::string &value) override;
     void setValue(bool value) override;
+    void setCallbackValueChange(const std::function<void (bool)> &callback) override;
 
 private:
     Ui::PropertyBoolWidget *ui;
+    std::function<void (bool)> callbackValueChange;
 };
 
 #endif // PROPERTYBOOLWIDGET_H

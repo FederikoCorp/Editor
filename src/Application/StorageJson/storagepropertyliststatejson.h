@@ -1,7 +1,6 @@
 #ifndef STORAGEPROPERTYLISTSTATEJSON_H
 #define STORAGEPROPERTYLISTSTATEJSON_H
 
-#include <QJsonObject>
 #include "../../export/Core/StorageProperty/storagepropertyliststate.h"
 #include "StorageJson/storagejson.h"
 

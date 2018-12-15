@@ -1,4 +1,8 @@
 #include "../../export/Core/Property/propertyliststate.h"
+#include "../../export/Core/Gateway/userinterfacegateway.h"
+#include "../../export/Core/Gateway/unloadgateway.h"
+#include "../../export/Core/PropertyControl/propertyliststatecontrol.h"
+#include "../../export/Core/StorageProperty/storagepropertyliststate.h"
 
 PropertyListState::PropertyListState(const std::string &name) : Property (name)
 {
@@ -17,7 +21,7 @@ void PropertyListState::createPropertyControl(UserInterfaceGateway *userInterfac
     });
 }
 
-std::unique_ptr<StorageProperty> PropertyListState::getStorageProperty(UnloadGateway *unloadGateway)
+Property::StoragePropertyPtr PropertyListState::createStorageProperty(UnloadGateway *unloadGateway)
 {
     std::unique_ptr<StoragePropertyListState> storage = unloadGateway->getStoragePropertyListState();
     storage->setValue(currentState);
@@ -25,7 +29,7 @@ std::unique_ptr<StorageProperty> PropertyListState::getStorageProperty(UnloadGat
     return std::move(storage);
 }
 
-std::unique_ptr<Property> PropertyListState::clone()
+Property::PropertyPtr PropertyListState::clone()
 {
     PropertyListState *copy = new PropertyListState(name);
     copy->setCurrentState(currentState);

@@ -1,4 +1,8 @@
 #include "../../export/Core/Property/propertyint.h"
+#include "../../export/Core/Gateway/userinterfacegateway.h"
+#include "../../export/Core/Gateway/unloadgateway.h"
+#include "../../export/Core/PropertyControl/propertyintcontrol.h"
+#include "../../export/Core/StorageProperty/storagepropertyint.h"
 
 PropertyInt::PropertyInt(const std::string &name) : Property (name)
 {
@@ -15,7 +19,7 @@ void PropertyInt::createPropertyControl(UserInterfaceGateway *userInterfaceGateW
     control->setCallbackValueChange([this](int value){ setValue(value); });
 }
 
-std::unique_ptr<StorageProperty> PropertyInt::getStorageProperty(UnloadGateway *unloadGateway)
+Property::StoragePropertyPtr PropertyInt::createStorageProperty(UnloadGateway *unloadGateway)
 {
     std::unique_ptr<StoragePropertyInt> storage = unloadGateway->getStoragePropertyInt();
     storage->setValue(value);
@@ -23,7 +27,7 @@ std::unique_ptr<StorageProperty> PropertyInt::getStorageProperty(UnloadGateway *
     return std::move(storage);
 }
 
-std::unique_ptr<Property> PropertyInt::clone()
+Property::PropertyPtr PropertyInt::clone()
 {
     PropertyInt *copy = new PropertyInt(name);
     copy->setValue(value);

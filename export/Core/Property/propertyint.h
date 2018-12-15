@@ -11,8 +11,8 @@ public:
     ~PropertyInt() override = default;
 
     void createPropertyControl(UserInterfaceGateway *userInterfaceGateWay) override;
-    virtual std::unique_ptr<StorageProperty> getStorageProperty(UnloadGateway *unloadGateway) override;
-    std::unique_ptr<Property> clone() override;
+    StoragePropertyPtr createStorageProperty(UnloadGateway *unloadGateway) override;
+    PropertyPtr clone() override;
 
     int getValue() const;
     void setValue(int value);

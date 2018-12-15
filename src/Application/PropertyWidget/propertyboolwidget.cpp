@@ -29,3 +29,8 @@ void PropertyBoolWidget::setValue(bool value)
     else
         ui->propertyCheckBox->setCheckState(Qt::CheckState::Unchecked);
 }
+
+void PropertyBoolWidget::setCallbackValueChange(const std::function<void (bool)> &callback)
+{
+    callbackValueChange = callback;
+}

@@ -4,9 +4,11 @@
 #include <QWidget>
 #include <QImage>
 #include <memory>
-#include "Tool/toolcreate.h"
-#include "Tool/toolerase.h"
-#include "Tool/toolselect.h"
+
+class ToolCreate;
+class ToolErase;
+class ToolSelect;
+class Tool;
 
 namespace Ui {
 class GameObjectToolBar;

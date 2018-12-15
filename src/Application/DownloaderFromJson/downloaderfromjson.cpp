@@ -1,4 +1,16 @@
 #include "downloaderfromjson.h"
+#include "../Setting/settingjson.h"
+#include "../../export/Core/scene.h"
+#include "../../export/Core/gameobject.h"
+#include "../../export/Core/Property/propertyint.h"
+#include "../../export/Core/Property/propertybool.h"
+#include "../../export/Core/Property/propertyfloat.h"
+#include "../../export/Core/Property/propertyliststate.h"
+
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 DownloaderFromJson::DownloaderFromJson(SettingJson *settingJson) : settingJson(settingJson)
 {
@@ -31,7 +43,6 @@ std::unique_ptr<Scene> DownloaderFromJson::loadScene(const std::string &fileName
     }
 
     std::unique_ptr<Scene> scene = std::make_unique<Scene>(width,height);
-    scene->setLimitGameObject(settingJson->getLimitGameObject());
 
     if(!loadGameObject(jsonMap, scene.get()))
     {
@@ -63,7 +74,7 @@ void DownloaderFromJson::loadProperty(QJsonArray jsonPropertyArray, GameObject *
             PropertyFloat *propertyFloat = dynamic_cast<PropertyFloat*>(gameObject->getProperty(toUint(i)));
             if(propertyFloat == nullptr)
                 continue;
-            propertyFloat->setValue(jsonProperty["float"].toInt());
+            propertyFloat->setValue(static_cast<float>(jsonProperty["float"].toDouble()));
         }
         else if (!jsonProperty["bool"].isNull())
         {
@@ -102,14 +113,10 @@ bool DownloaderFromJson::loadGameObject(QJsonObject jsonMap, Scene *scene)
         if(scene->isGameObject(x, y))
             continue;
 
-        if(scene->isLimit(prototype))
-        {
-            if(scene->getLimit(prototype) == 0)
-                continue;
-            scene->decLimit(prototype);
-        }
-
         std::unique_ptr<GameObject> gameObject = prototype->clone();
+        if(!gameObject)
+            continue;
+        gameObject->setPosition(x, y);
 
         if(!jsonObject["property"].isNull() && jsonObject["property"].isArray())
         {
@@ -117,7 +124,7 @@ bool DownloaderFromJson::loadGameObject(QJsonObject jsonMap, Scene *scene)
             loadProperty(jsonPropertyArray, gameObject.get());
         }
 
-        scene->addGameObject(std::move(gameObject), x, y);
+        scene->addGameObject(std::move(gameObject));
     }
     return true;
 }

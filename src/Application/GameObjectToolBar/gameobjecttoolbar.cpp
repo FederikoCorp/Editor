@@ -1,6 +1,10 @@
 #include "gameobjecttoolbar.h"
 #include "ui_gameobjecttoolbar.h"
 
+#include "Tool/toolcreate.h"
+#include "Tool/toolerase.h"
+#include "Tool/toolselect.h"
+
 GameObjectToolBar::GameObjectToolBar(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameObjectToolBar)

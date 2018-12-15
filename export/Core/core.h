@@ -1,20 +1,26 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include "Gateway/userinterfacegateway.h"
-#include "Gateway/settinggateway.h"
-#include "Gateway/downloadgateway.h"
-#include "../Core/gameobject.h"
-#include "../Core/scene.h"
+#include <memory>
 
-//Класс отвечает за управление программой.
-//Так как функций мало, не стал дробить на несколько классов
+class GameObject;
+class Scene;
+class UserInterfaceGateway;
+class SettingGateway;
+class DownloadGateway;
+class UnloadGateway;
+
 class Core
 {
 public:
+    using uint = unsigned int; 
     Core(UserInterfaceGateway *uiGateWay, SettingGateway *settingGateway, DownloadGateway *downloadGateway, UnloadGateway *unloadGateway);
+    ~Core();
 
 private:
+    struct CoreData;
+    std::unique_ptr<CoreData> data;
+
     void addGameObjectCallback(uint x, uint y, uint index);
     void selectGameObjectCallback(uint x, uint y);
     void removeGameObjectCallback(uint x, uint y);
@@ -25,13 +31,6 @@ private:
 
     void createPropertyControl(GameObject *gameObject);
     void loadAvailableGameObject();
-
-    UserInterfaceGateway *uiGateway;
-    SettingGateway *settingGateway;
-    DownloadGateway *downloadGateway;
-    UnloadGateway *unloadGateway;
-
-    std::unique_ptr<Scene> scene;
 };
 
 #endif // CORE_H

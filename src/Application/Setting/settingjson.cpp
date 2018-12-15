@@ -1,4 +1,16 @@
 #include "settingjson.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
+#include <QFile>
+
+#include "SceneObject/sceneobjectasimage.h"
+#include "../../export/Core/gameobject.h"
+#include "../../export/Core/Property/propertybool.h"
+#include "../../export/Core/Property/propertyfloat.h"
+#include "../../export/Core/Property/propertyint.h"
+#include "../../export/Core/Property/propertyliststate.h"
 
 SettingJson::SettingJson(const std::string &fileName)
 {
@@ -19,13 +31,18 @@ SettingJson::SettingJson(const std::string &fileName)
             imageFileName = gameObjectJson["image"].toString();
 
         std::shared_ptr<SceneObject> sceneObject(new SceneObjectAsImage(imageFileName.toStdString()));
-        std::unique_ptr<GameObject> gameObject(new GameObject(name.toStdString(), sceneObject));
+        std::unique_ptr<GameObject> gameObject;
 
         if(!gameObjectJson["limit"].isNull())
         {
-            SceneObject *sceneObject = gameObject->getSceneObject().get();
-            limitGameObject[sceneObject] = static_cast<uint>(gameObjectJson["limit"].toInt());
+            uint limit = static_cast<uint>(gameObjectJson["limit"].toInt());
+            //limit + 1, потому что 1 объект будет лежать не на сцене, а в availableGameObjects
+            gameObject.reset(new GameObject(name.toStdString(), sceneObject, limit + 1));
         }
+        else
+            gameObject.reset(new GameObject(name.toStdString(), sceneObject));
+
+
         if(!gameObjectJson["property"].isNull())
         {
             QJsonObject propertiesJson = gameObjectJson["property"].toObject();
@@ -87,14 +104,11 @@ SettingJson::SettingJson(const std::string &fileName)
     file.close();
 }
 
+SettingJson::~SettingJson() = default;
+
 std::vector<std::unique_ptr<GameObject> >& SettingJson::getAvailableGameObjects()
 {
     return availableGameObject;
-}
-
-std::unordered_map<SceneObject*, uint> SettingJson::getLimitGameObject()
-{
-    return limitGameObject;
 }
 
 GameObject *SettingJson::getGameObjectByName(const std::string &name)

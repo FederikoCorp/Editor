@@ -1,41 +1,91 @@
-#include "gameobject.h"
+#include <limits>
+#include "../../export/Core/gameobject.h"
+#include "../../export/Core/Property/property.h"
 
-GameObject::GameObject(const std::string &name, std::shared_ptr<SceneObject> sceneObject) :
-    name(name), sceneObject(sceneObject)
+struct GameObject::GameObjectData
 {
+    std::string name;
+    std::shared_ptr<SceneObject> sceneObject;
+    std::vector<std::unique_ptr<Property>> properties;
+    uint x;
+    uint y;
+    uint limit = std::numeric_limits<uint>::max();
+    std::shared_ptr<uint> count;
+};
 
+GameObject::GameObject(const std::string &name, GameObject::SceneObjectPtr sceneObject) :
+    data(new GameObjectData)
+{
+    data->name = name;
+    data->sceneObject = sceneObject;
+    data->count = std::make_shared<uint>(1);
 }
 
-void GameObject::addProperty(std::unique_ptr<Property> property)
+GameObject::GameObject(const std::string &name, SceneObjectPtr sceneObject, uint limit) :
+    data(new GameObjectData)
 {
-    vecProperty.emplace_back(property.release());
+    data->name = name;
+    data->sceneObject = sceneObject;
+    data->count = std::make_shared<uint>(1);
+    data->limit = limit;
+}
+
+GameObject::~GameObject()
+{
+    *data->count = *data->count - 1;
+}
+
+void GameObject::addProperty(PropertyPtr property)
+{
+    data->properties.emplace_back(property.release());
 }
 
 Property *GameObject::getProperty(uint index)
 {
-    return vecProperty.at(index).get();
+    return data->properties.at(index).get();
 }
 
-uint GameObject::getCountProperty() const
+GameObject::uint GameObject::getCountProperty() const
 {
-    return vecProperty.size();
+    return data->properties.size();
 }
 
-std::shared_ptr<SceneObject> GameObject::getSceneObject()
+GameObject::SceneObjectPtr GameObject::getSceneObject()
 {
-    return sceneObject;
+    return data->sceneObject;
 }
 
-std::unique_ptr<GameObject> GameObject::clone()
+GameObject::GameObjectPtr GameObject::clone()
 {
-    std::unique_ptr<GameObject> copy(new GameObject(name, sceneObject));
-    for(std::unique_ptr<Property> &property : vecProperty)
+    if(*data->count >= data->limit)
+        return nullptr;
+
+    std::unique_ptr<GameObject> copy(new GameObject(data->name, data->sceneObject, data->limit));
+    copy->data->count = data->count;
+    *data->count = *data->count + 1;
+    for(PropertyPtr &property : data->properties)
         copy->addProperty(property->clone());
     return copy;
 }
 
 std::string GameObject::getName() const
 {
-    return name;
+    return data->name;
+}
+
+GameObject::uint GameObject::getX() const
+{
+    return data->x;
+}
+
+GameObject::uint GameObject::getY() const
+{
+    return data->y;
+}
+
+void GameObject::setPosition(GameObject::uint x, GameObject::uint y)
+{
+    data->x = x;
+    data->y = y;
 }
 

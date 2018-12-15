@@ -3,11 +3,12 @@
 
 #include <functional>
 #include <memory>
-#include "../../export/Core/PropertyControl/propertyboolcontrol.h"
-#include "../../export/Core/PropertyControl/propertyfloatcontrol.h"
-#include "../../export/Core/PropertyControl/propertyintcontrol.h"
-#include "../../export/Core/PropertyControl/propertyliststatecontrol.h"
-#include "../../export/Core/SceneObject/sceneobject.h"
+
+class PropertyBoolControl;
+class PropertyFloatControl;
+class PropertyIntControl;
+class PropertyListStateControl;
+class SceneObject;
 
 using uint = unsigned int;
 

@@ -1,4 +1,8 @@
 #include "../../export/Core/Property/propertyfloat.h"
+#include "../../export/Core/Gateway/userinterfacegateway.h"
+#include "../../export/Core/Gateway/unloadgateway.h"
+#include "../../export/Core/PropertyControl/propertyfloatcontrol.h"
+#include "../../export/Core/StorageProperty/storagepropertyfloat.h"
 
 PropertyFloat::PropertyFloat(const std::string &name) : Property (name)
 {
@@ -15,7 +19,7 @@ void PropertyFloat::createPropertyControl(UserInterfaceGateway *userInterfaceGat
     control->setCallbackValueChange([this](float value){ setValue(value); });
 }
 
-std::unique_ptr<StorageProperty> PropertyFloat::getStorageProperty(UnloadGateway *unloadGateway)
+Property::StoragePropertyPtr PropertyFloat::createStorageProperty(UnloadGateway *unloadGateway)
 {
     std::unique_ptr<StoragePropertyFloat> storage = unloadGateway->getStoragePropertyFloat();
     storage->setValue(value);
@@ -23,7 +27,7 @@ std::unique_ptr<StorageProperty> PropertyFloat::getStorageProperty(UnloadGateway
     return std::move(storage);
 }
 
-std::unique_ptr<Property> PropertyFloat::clone()
+Property::PropertyPtr PropertyFloat::clone()
 {
     PropertyFloat *copy = new PropertyFloat(name);
     copy->setValue(value);

@@ -1,7 +1,9 @@
 #ifndef STORAGEGATEWAY_H
 #define STORAGEGATEWAY_H
 
-#include "../Core/scene.h"
+#include <memory>
+
+class Scene;
 
 class DownloadGateway
 {

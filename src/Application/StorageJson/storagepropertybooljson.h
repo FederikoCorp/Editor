@@ -1,7 +1,6 @@
 #ifndef STORAGEPROPERTYBOOLJSON_H
 #define STORAGEPROPERTYBOOLJSON_H
 
-#include <QJsonObject>
 #include "../../export/Core/StorageProperty/storagepropertybool.h"
 #include "StorageJson/storagejson.h"
 

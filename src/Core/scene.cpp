@@ -1,77 +1,63 @@
-#include "scene.h"
+#include <map>
+#include "../../export/Core/scene.h"
+#include "../../export/Core/gameobject.h"
 
-Scene::Scene(uint width, uint height) : width(width), height(height)
+struct Scene::SceneData
 {
-    gameObjects.resize(width);
-    for(unsigned int i = 0; i < gameObjects.size(); ++i)
-        gameObjects[i].resize(height);
+    uint width;
+    uint height;
+    std::map<Position, GameObjectPtr> gameObjects;
+};
+
+Scene::Scene(uint width, uint height) : data(new SceneData())
+{
+    data->width = width;
+    data->height = height;
 }
 
-void Scene::addGameObject(std::unique_ptr<GameObject> gameObject, uint x, uint y)
+Scene::~Scene() = default;
+
+void Scene::addGameObject(GameObjectPtr gameObject)
 { 
-    pair pos = std::make_pair(x, y);
-    gameObjectPositionMap.insert(std::make_pair(gameObject.get(), pos));
-    gameObjects[x][y].swap(gameObject);
+    Position pos = std::make_pair(gameObject->getX(), gameObject->getY());
+    data->gameObjects.insert(std::make_pair(pos, std::move(gameObject)));
 }
 
 void Scene::removeGameObject(uint x, uint y)
 {
-    std::unique_ptr<GameObject> empty;
-    auto it = gameObjectPositionMap.find(gameObjects[x][y].get());
-    gameObjectPositionMap.erase(it);
-    gameObjects[x][y].swap(empty);
+    auto it = data->gameObjects.find(std::make_pair(x, y));
+    data->gameObjects.erase(it);
 }
 
 bool Scene::isGameObject(uint x, uint y)
 {
-    return gameObjects[x][y] != nullptr;
+    return data->gameObjects.find(std::make_pair(x, y)) != data->gameObjects.end();
 }
 
 GameObject *Scene::getGameObject(uint x, uint y)
 {
-    return gameObjects[x][y].get();
+    auto it = data->gameObjects.find(std::make_pair(x, y));
+    if(it == data->gameObjects.end())
+        return nullptr;
+    return it->second.get();
 }
 
-uint Scene::getWidth() const
+Scene::uint Scene::getWidth() const
 {
-    return width;
+    return data->width;
 }
 
-uint Scene::getHeight() const
+Scene::uint Scene::getHeight() const
 {
-    return height;
+    return data->height;
 }
 
-bool Scene::isLimit(GameObject *gameObject) const
+Scene::Iterator Scene::begin()
 {
-    SceneObject *sceneObject = gameObject->getSceneObject().get();
-    return limitGameObject.find(sceneObject) != limitGameObject.end();
+    return data->gameObjects.cbegin();
 }
 
-uint Scene::getLimit(GameObject *gameObject) const
+Scene::Iterator Scene::end()
 {
-    SceneObject *sceneObject = gameObject->getSceneObject().get();
-    return limitGameObject.at(sceneObject);
-}
-
-void Scene::incLimit(GameObject *gameObject)
-{
-    SceneObject *sceneObject = gameObject->getSceneObject().get();
-    limitGameObject[sceneObject] += 1;
-}
-
-void Scene::decLimit(GameObject *gameObject)
-{
-    SceneObject *sceneObject = gameObject->getSceneObject().get();
-    limitGameObject[sceneObject] -= 1;
-}
-
-void Scene::setLimitGameObject(const std::unordered_map<SceneObject *, uint> &value)
-{
-    limitGameObject = value;
-}
-
-std::unordered_map<GameObject*, Scene::pair> &Scene::getGameObjectPositionMap()
-{
-    return gameObjectPositionMap;
+    return data->gameObjects.cend();
 }

@@ -1,8 +1,8 @@
 #ifndef SCENEOBJECTASIMAGE_H
 #define SCENEOBJECTASIMAGE_H
 
-#include "../../export/Core/SceneObject/sceneobject.h"
 #include <string>
+#include "../../export/Core/SceneObject/sceneobject.h"
 
 class SceneObjectAsImage : public SceneObject
 {
